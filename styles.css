@@ -1,0 +1,32 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+}
+
+.paper-grid {
+  background-image: linear-gradient(rgba(49, 92, 71, .035) 1px, transparent 1px), linear-gradient(90deg, rgba(49, 92, 71, .035) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.task-enter {
+  animation: task-enter .24s ease-out both;
+}
+
+@keyframes task-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: .7;
+}
+
+button,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}

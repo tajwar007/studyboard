@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f5ef">
+  <title>Studyboard — Student Task Manager</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="./app.js"></script>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+</head>
+<body class="paper-grid min-h-screen text-ink antialiased">
+  <div class="mx-auto min-h-screen max-w-7xl px-4 py-5 sm:px-7 sm:py-8 lg:px-10">
+    <header class="flex items-center justify-between border-b border-line pb-5">
+      <a href="#" class="flex items-center gap-3 text-ink no-underline" aria-label="Studyboard home">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-forest text-lime"><i data-lucide="notebook-pen" class="h-5 w-5"></i></span>
+        <span class="text-lg font-bold tracking-tight">studyboard<span class="text-forest">.</span></span>
+      </a>
+      <div class="flex items-center gap-2 text-sm text-stone-600 sm:gap-3">
+        <span class="hidden sm:inline">A little progress every day.</span>
+        <span class="grid h-9 w-9 place-items-center rounded-full border border-line bg-white font-semibold text-forest">S</span>
+      </div>
+    </header>
+
+    <main class="grid gap-8 py-8 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-12 lg:py-12">
+      <section class="min-w-0">
+        <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p id="today-label" class="mb-2 text-xs font-bold uppercase tracking-[.14em] text-forest">YOUR STUDY SPACE</p>
+            <h1 class="font-display text-4xl leading-tight sm:text-5xl">Make room for<br class="sm:hidden"> <span class="text-forest">what matters.</span></h1>
+            <p class="mt-3 text-sm text-stone-600">One clear list. One thing at a time.</p>
+          </div>
+          <div class="flex items-center gap-2 rounded-full border border-line bg-white/80 px-3 py-2 text-sm text-stone-600">
+            <i data-lucide="calendar-days" class="h-4 w-4 text-forest"></i>
+            <span id="date-label"></span>
+          </div>
+        </div>
+
+        <section class="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Task summary">
+          <div class="rounded-xl border border-line bg-white/85 p-4 sm:p-5">
+            <p class="text-xs font-semibold uppercase tracking-wider text-stone-500">To do</p>
+            <div class="mt-2 flex items-end justify-between"><span id="todo-count" class="font-display text-3xl">0</span><i data-lucide="list-todo" class="mb-1 h-5 w-5 text-forest"></i></div>
+          </div>
+          <div class="rounded-xl border border-line bg-white/85 p-4 sm:p-5">
+            <p class="text-xs font-semibold uppercase tracking-wider text-stone-500">Completed</p>
+            <div class="mt-2 flex items-end justify-between"><span id="done-count" class="font-display text-3xl">0</span><i data-lucide="circle-check" class="mb-1 h-5 w-5 text-forest"></i></div>
+          </div>
+          <div class="col-span-2 rounded-xl border border-forest bg-forest p-4 text-white sm:col-span-1 sm:p-5">
+            <p class="text-xs font-semibold uppercase tracking-wider text-white/70">Your progress</p>
+            <div class="mt-2 flex items-end justify-between"><span id="progress-label" class="font-display text-3xl">0%</span><i data-lucide="trending-up" class="mb-1 h-5 w-5 text-lime"></i></div>
+            <div class="mt-3 h-1.5 overflow-hidden rounded-full bg-white/20"><div id="progress-bar" class="h-full rounded-full bg-lime transition-all duration-500" style="width: 0%"></div></div>
+          </div>
+        </section>
+
+        <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+          <h2 class="font-display text-2xl">Your tasks <span id="visible-count" class="font-sans text-sm font-medium text-stone-500">(0)</span></h2>
+          <div class="flex flex-wrap gap-1 rounded-lg border border-line bg-white/80 p-1" role="group" aria-label="Filter tasks">
+            <button data-filter="all" class="filter-btn rounded-md bg-forest px-3 py-1.5 text-xs font-semibold text-white">All</button>
+            <button data-filter="active" class="filter-btn rounded-md px-3 py-1.5 text-xs font-semibold text-stone-600 hover:bg-paper">Active</button>
+            <button data-filter="completed" class="filter-btn rounded-md px-3 py-1.5 text-xs font-semibold text-stone-600 hover:bg-paper">Done</button>
+          </div>
+        </div>
+
+        <div id="task-list" class="divide-y divide-line overflow-hidden rounded-xl border border-line bg-white/90" aria-live="polite"></div>
+        <div id="empty-state" class="hidden rounded-xl border border-dashed border-stone-300 bg-white/50 px-5 py-12 text-center">
+          <span class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-lime/50 text-forest"><i data-lucide="notebook-tabs" class="h-5 w-5"></i></span>
+          <p id="empty-title" class="mt-4 font-semibold">Your page is clear.</p>
+          <p id="empty-copy" class="mt-1 text-sm text-stone-500">Add a task to get your study session started.</p>
+        </div>
+      </section>
+
+      <aside class="lg:pt-1">
+        <section class="rounded-xl border border-line bg-white/90 p-5 sm:p-6">
+          <div class="mb-5 flex items-start justify-between">
+            <div><p class="text-xs font-bold uppercase tracking-[.14em] text-forest">QUICK ADD</p><h2 class="mt-1 font-display text-2xl">New task</h2></div>
+            <span class="grid h-9 w-9 place-items-center rounded-lg bg-lime/60 text-forest"><i data-lucide="square-pen" class="h-4 w-4"></i></span>
+          </div>
+          <form id="task-form" class="space-y-4">
+            <div>
+              <label for="task-title" class="mb-1.5 block text-xs font-semibold text-stone-600">Task name</label>
+              <input id="task-title" name="title" type="text" maxlength="100" placeholder="e.g. Review biology notes" required class="w-full rounded-lg border border-line bg-paper/60 px-3 py-2.5 text-sm outline-none transition focus:border-forest focus:ring-2 focus:ring-forest/10">
+            </div>
+            <div>
+              <label for="task-subject" class="mb-1.5 block text-xs font-semibold text-stone-600">Subject</label>
+              <select id="task-subject" name="subject" class="w-full rounded-lg border border-line bg-paper/60 px-3 py-2.5 text-sm outline-none focus:border-forest focus:ring-2 focus:ring-forest/10">
+                <option value="General">General</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Science">Science</option>
+                <option value="English">English</option>
+                <option value="History">History</option>
+                <option value="Computer science">Computer science</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="task-due" class="mb-1.5 block text-xs font-semibold text-stone-600">Due date</label>
+                <input id="task-due" name="due" type="date" class="w-full rounded-lg border border-line bg-paper/60 px-2.5 py-2.5 text-xs outline-none focus:border-forest focus:ring-2 focus:ring-forest/10">
+              </div>
+              <div>
+                <label for="task-priority" class="mb-1.5 block text-xs font-semibold text-stone-600">Priority</label>
+                <select id="task-priority" name="priority" class="w-full rounded-lg border border-line bg-paper/60 px-2.5 py-2.5 text-sm outline-none focus:border-forest focus:ring-2 focus:ring-forest/10">
+                  <option value="Normal">Normal</option>
+                  <option value="High">High</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-lg bg-forest px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#254735] focus:outline-none focus:ring-2 focus:ring-forest focus:ring-offset-2">
+              <i data-lucide="plus" class="h-4 w-4"></i> Add task
+            </button>
+          </form>
+        </section>
+
+        <section class="mt-4 flex gap-3 border-l-2 border-forest/30 px-4 py-3 text-sm text-stone-600">
+          <i data-lucide="lightbulb" class="mt-0.5 h-4 w-4 shrink-0 text-forest"></i>
+          <p>Small steps count. Pick one task and give it your full attention.</p>
+        </section>
+      </aside>
+    </main>
+    <footer class="border-t border-line py-5 text-center text-xs text-stone-500">Made for your next small win.</footer>
+  </div>
+
+</body>
+</html>
