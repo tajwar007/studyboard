@@ -1,3 +1,4 @@
 # studyboard
 student task manager
-https://classy-flan.netlify.app?utm_source=chatgpt.com
+https://iridescent-cupcake-f8749f.netlify.app/
+https://github.com/tajwar007/studyboard
